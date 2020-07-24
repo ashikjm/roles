@@ -1,0 +1,22 @@
+---
+- name : Create the facts.d directory
+  file :
+    path: '/etc/ansible/facts.d'
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name : Copy fact file
+  copy:
+    src: 'test.fact'
+    dest: '/etc/ansible/facts.d/test.fact'
+    owner: root
+    group: root
+    mode: 0755
+  register: fact_changed
+
+- name: Refesh facts
+  setup:
+    gather_subset: facter
+  when: fact_changed.changed
